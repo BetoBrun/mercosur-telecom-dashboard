@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MERCOSUR · Indicadores de Telecomunicações SGT-1 CTSPT</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #0a0e1a;
+    --surface: #111827;
+    --surface2: #1a2235;
+    --border: #1e2d45;
+    --accent: #00c2ff;
+    --accent2: #6c63ff;
+    --accent3: #00e5a0;
+    --text: #e8eaf0;
+    --muted: #7a8599;
+    --arg: #74b9ff;
+    --bra: #55efc4;
+    --pry: #fdcb6e;
+    --ury: #a29bfe;
+    --bol: #fd79a8;
+    --card-shadow: 0 4px 24px rgba(0,0,0,0.4);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ─── HEADER ─── */
+  header {
+    background: linear-gradient(135deg, #0a0e1a 0%, #0d1b2e 60%, #0a1628 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(12px);
+  }
+  .header-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 68px;
+    gap: 1rem;
+  }
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .logo-badge {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: #fff;
+    font-weight: 800;
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    padding: 0.3rem 0.6rem;
+    border-radius: 6px;
+  }
+  .logo-text {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.2;
+  }
+  .logo-sub {
+    font-size: 0.72rem;
+    color: var(--muted);
+    font-weight: 400;
+  }
+  .header-pill {
+    background: rgba(0,194,255,0.1);
+    border: 1px solid rgba(0,194,255,0.25);
+    color: var(--accent);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+  }
+
+  /* ─── HERO ─── */
+  .hero {
+    background: linear-gradient(180deg, #0d1b2e 0%, var(--bg) 100%);
+    padding: 3.5rem 2rem 2.5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -80px; left: 50%;
+    transform: translateX(-50%);
+    width: 600px; height: 300px;
+    background: radial-gradient(ellipse, rgba(0,194,255,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-eyebrow {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+  .hero h1 {
+    font-size: clamp(1.6rem, 3.5vw, 2.6rem);
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 0.75rem;
+    background: linear-gradient(135deg, #fff 0%, var(--accent) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .hero p {
+    color: var(--muted);
+    font-size: 0.95rem;
+    max-width: 580px;
+    margin: 0 auto 2rem;
+    line-height: 1.6;
+  }
+  .year-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+  }
+  .year-tab {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 0.82rem;
+    font-weight: 600;
+    padding: 0.45rem 1.1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .year-tab:hover { color: var(--text); border-color: var(--accent); }
+  .year-tab.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #000;
+  }
+
+  /* ─── LAYOUT ─── */
+  .container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+
+  /* ─── SECTION LABELS ─── */
+  .section-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* ─── KPI GRID ─── */
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+  }
+  .kpi-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.25rem 1.4rem;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .kpi-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .kpi-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+  }
+  .kpi-card.arg::before { background: var(--arg); }
+  .kpi-card.bra::before { background: var(--bra); }
+  .kpi-card.pry::before { background: var(--pry); }
+  .kpi-card.ury::before { background: var(--ury); }
+  .kpi-flag { font-size: 1.6rem; margin-bottom: 0.5rem; }
+  .kpi-country {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.75rem;
+  }
+  .kpi-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 0.3rem;
+  }
+  .kpi-label { font-size: 0.72rem; color: var(--muted); }
+  .kpi-value { font-size: 0.9rem; font-weight: 700; color: var(--text); }
+  .kpi-value span { font-size: 0.65rem; color: var(--muted); font-weight: 400; }
+
+  /* ─── CHART GRID ─── */
+  .chart-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+    gap: 1.25rem;
+    margin-bottom: 2.5rem;
+  }
+  .chart-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 1.5rem;
+    transition: border-color 0.2s;
+  }
+  .chart-card:hover { border-color: rgba(0,194,255,0.3); }
+  .chart-card.wide { grid-column: 1 / -1; }
+  .chart-title {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 0.25rem;
+  }
+  .chart-subtitle {
+    font-size: 0.72rem;
+    color: var(--muted);
+    margin-bottom: 1.25rem;
+  }
+  .chart-wrap {
+    position: relative;
+    height: 280px;
+  }
+  .chart-wrap.tall { height: 340px; }
+
+  /* ─── TREND TABLE ─── */
+  .trend-table-wrap {
+    overflow-x: auto;
+    margin-bottom: 2.5rem;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.82rem;
+  }
+  thead th {
+    background: var(--surface2);
+    padding: 0.75rem 1rem;
+    text-align: left;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+  tbody tr {
+    border-bottom: 1px solid var(--border);
+    transition: background 0.15s;
+  }
+  tbody tr:hover { background: var(--surface2); }
+  tbody td {
+    padding: 0.7rem 1rem;
+    color: var(--text);
+    white-space: nowrap;
+  }
+  .country-cell {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+  }
+  .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .delta {
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 0.2rem 0.45rem;
+    border-radius: 5px;
+  }
+  .delta.up { background: rgba(0,229,160,0.12); color: var(--accent3); }
+  .delta.down { background: rgba(253,121,168,0.12); color: var(--bol); }
+  .delta.neutral { background: rgba(122,133,153,0.12); color: var(--muted); }
+
+  /* ─── FOOTER ─── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 2rem;
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.75rem;
+    line-height: 1.8;
+  }
+  footer a { color: var(--accent); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+
+  /* ─── COUNTRY SELECTOR ─── */
+  .filter-row {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.5rem;
+    align-items: center;
+  }
+  .filter-label { font-size: 0.75rem; color: var(--muted); font-weight: 600; }
+  .filter-btn {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 0.78rem;
+    font-weight: 600;
+    padding: 0.35rem 0.9rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .filter-btn.active-arg { background: rgba(116,185,255,0.12); border-color: var(--arg); color: var(--arg); }
+  .filter-btn.active-bra { background: rgba(85,239,196,0.12); border-color: var(--bra); color: var(--bra); }
+  .filter-btn.active-pry { background: rgba(253,203,110,0.12); border-color: var(--pry); color: var(--pry); }
+  .filter-btn.active-ury { background: rgba(162,155,254,0.12); border-color: var(--ury); color: var(--ury); }
+
+  /* ─── PILL BADGE ─── */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    background: rgba(0,194,255,0.08);
+    border: 1px solid rgba(0,194,255,0.2);
+    color: var(--accent);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    padding: 0.2rem 0.6rem;
+    border-radius: 20px;
+    text-transform: uppercase;
+  }
+
+  /* ─── LANG SWITCHER ─── */
+  .lang-switcher {
+    display: flex;
+    gap: 0.25rem;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 0.2rem;
+  }
+  .lang-btn {
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    padding: 0.3rem 0.7rem;
+    border-radius: 7px;
+    cursor: pointer;
+    transition: all 0.18s;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+  }
+  .lang-btn:hover { color: var(--text); }
+  .lang-btn.active {
+    background: var(--accent);
+    color: #000;
+  }
+
+  @media (max-width: 700px) {
+    .chart-grid { grid-template-columns: 1fr; }
+    .hero { padding: 2rem 1rem 1.5rem; }
+    .container { padding: 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <div class="logo">
+      <div class="logo-badge">MERCOSUR</div>
+      <div>
+        <div class="logo-text">SGT-1 · CTSPT</div>
+        <div class="logo-sub" id="logo-sub-text">Indicadores de Telecomunicaciones</div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:0.75rem;">
+      <div class="header-pill">2020 – 2024</div>
+      <div class="lang-switcher">
+        <button class="lang-btn" id="lang-pt" onclick="setLang('pt')">🇧🇷 PT</button>
+        <button class="lang-btn active" id="lang-es" onclick="setLang('es')">🇦🇷 ES</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">Subgrupo de Trabajo N.º 1 — Comunicaciones</div>
+  <h1>Observatorio de Telecomunicaciones<br>del MERCOSUR</h1>
+  <p>Monitoreo de la evolución de los indicadores básicos de acceso a servicios de telecomunicaciones en los Estados Miembros, según definiciones internacionales de la UIT.</p>
+  <div class="year-tabs" id="yearTabs">
+    <button class="year-tab" onclick="setYear(2020)">2020</button>
+    <button class="year-tab" onclick="setYear(2021)">2021</button>
+    <button class="year-tab" onclick="setYear(2022)">2022</button>
+    <button class="year-tab" onclick="setYear(2023)">2023</button>
+    <button class="year-tab active" onclick="setYear(2024)">2024</button>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="container">
+
+  <!-- KPI CARDS -->
+  <div class="section-label" id="sec-kpi">Painel por País <span class="badge" id="yearBadge">2024</span></div>
+  <div class="kpi-grid" id="kpiGrid"></div>
+
+  <!-- CHARTS ROW 1 -->
+  <div class="section-label" id="sec-compare">Penetración por 100 Habitantes — Visión Comparativa</div>
+  <div class="chart-grid">
+    <div class="chart-card">
+      <div class="chart-title" id="ct-mobile-title">📱 Comunicaciones Móviles</div>
+      <div class="chart-subtitle" id="ct-mobile-sub">Accesos por 100 hab. · comparativo entre países</div>
+      <div class="chart-wrap"><canvas id="chartMobile"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title" id="ct-internet-title">🌐 Internet Fija</div>
+      <div class="chart-subtitle" id="ct-internet-sub">Accesos por 100 hab. · comparativo entre países</div>
+      <div class="chart-wrap"><canvas id="chartInternet"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title" id="ct-fixed-title">☎️ Telefonía Fija</div>
+      <div class="chart-subtitle" id="ct-fixed-sub">Accesos por 100 hab. · comparativo entre países</div>
+      <div class="chart-wrap"><canvas id="chartFixed"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title" id="ct-total-title">📊 Total de Accesos (Millones)</div>
+      <div class="chart-subtitle" id="ct-total-sub">Todos los servicios · comparativo entre países</div>
+      <div class="chart-wrap"><canvas id="chartTotal"></canvas></div>
+    </div>
+  </div>
+
+  <!-- TREND CHARTS -->
+  <div class="section-label" id="sec-trend">Evolución Histórica 2020–2024</div>
+  <div class="filter-row">
+    <span class="filter-label" id="filter-label">Países:</span>
+    <button class="filter-btn active-arg" id="btn-arg" onclick="toggleCountry('arg')">🇦🇷 Argentina</button>
+    <button class="filter-btn active-bra" id="btn-bra" onclick="toggleCountry('bra')">🇧🇷 Brasil</button>
+    <button class="filter-btn active-pry" id="btn-pry" onclick="toggleCountry('pry')">🇵🇾 Paraguay</button>
+    <button class="filter-btn active-ury" id="btn-ury" onclick="toggleCountry('ury')">🇺🇾 Uruguay</button>
+  </div>
+  <div class="chart-grid">
+    <div class="chart-card wide">
+      <div class="chart-title" id="tr-mobile-title">Evolución — Comunicaciones Móviles (por 100 hab.)</div>
+      <div class="chart-subtitle" id="tr-mobile-sub">Serie temporal 2020–2024</div>
+      <div class="chart-wrap tall"><canvas id="trendMobile"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title" id="tr-internet-title">Evolución — Internet Fija (por 100 hab.)</div>
+      <div class="chart-subtitle" id="tr-internet-sub">Serie temporal 2020–2024</div>
+      <div class="chart-wrap"><canvas id="trendInternet"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title" id="tr-fixed-title">Evolución — Telefonía Fija (por 100 hab.)</div>
+      <div class="chart-subtitle" id="tr-fixed-sub">Serie temporal 2020–2024</div>
+      <div class="chart-wrap"><canvas id="trendFixed"></canvas></div>
+    </div>
+  </div>
+
+  <!-- DATA TABLE -->
+  <div class="section-label" id="sec-table">Tabla Completa de Datos <span class="badge" id="tableBadge">2024</span></div>
+  <div class="trend-table-wrap">
+    <table>
+      <thead id="tableHead">
+        <tr>
+          <th>País</th>
+          <th>Tel. Fija (M)</th>
+          <th>Tel. Fija /100 hab</th>
+          <th>Móvil (M)</th>
+          <th>Móvil /100 hab</th>
+          <th>Internet Fija (M)</th>
+          <th>Internet Fija /100 hab</th>
+        </tr>
+      </thead>
+      <tbody id="dataTable"></tbody>
+    </table>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <strong id="foot1">MERCOSUR — SGT-1 Comunicaciones · CTSPT</strong><br>
+  <span id="foot2">Comisión Temática de Servicios Públicos de Telecomunicaciones</span><br>
+  <span id="foot3">Datos consolidados conforme a informes anuales publicados en el sitio del MERCOSUR · Definiciones: </span><a href="https://www.itu.int" target="_blank">UIT / ITU</a><br>
+  <span id="foot4" style="margin-top:0.5rem;display:block">Dashboard desarrollado para publicación abierta · Datos: 2020–2024</span>
+</footer>
+
+<script>
+// ─── I18N ───────────────────────────────────────────────────────────────────
+const T = {
+  pt: {
+    htmlLang: 'pt',
+    pageTitle: 'MERCOSUR · Indicadores de Telecomunicações SGT-1 CTSPT',
+    logoSub: 'Indicadores de Telecomunicações',
+    heroEyebrow: 'Subgrupo de Trabalho N.º 1 — Comunicações',
+    heroH1: 'Observatório de Telecomunicações<br>do MERCOSUL',
+    heroP: 'Monitoramento da evolução dos indicadores básicos de acesso a serviços de telecomunicações nos Estados-Membros, conforme definições internacionais da UIT.',
+    secKPI: 'Painel por País',
+    secCompare: 'Penetração por 100 Habitantes — Visão Comparativa',
+    secTrend: 'Evolução Histórica 2020–2024',
+    secTable: 'Tabela Completa de Dados',
+    filterLabel: 'Países:',
+    chartMobileTitle: '📱 Comunicações Móveis',
+    chartMobileSub: 'Acessos por 100 hab. · comparativo entre países',
+    chartInternetTitle: '🌐 Internet Fixa',
+    chartInternetSub: 'Acessos por 100 hab. · comparativo entre países',
+    chartFixedTitle: '☎️ Telefonia Fixa',
+    chartFixedSub: 'Acessos por 100 hab. · comparativo entre países',
+    chartTotalTitle: '📊 Total de Acessos (Milhões)',
+    chartTotalSub: 'Todos os serviços · comparativo entre países',
+    trendMobileTitle: 'Evolução — Comunicações Móveis (por 100 hab.)',
+    trendMobileSub: 'Série temporal 2020–2024',
+    trendInternetTitle: 'Evolução — Internet Fixa (por 100 hab.)',
+    trendInternetSub: 'Série temporal 2020–2024',
+    trendFixedTitle: 'Evolução — Telefonia Fixa (por 100 hab.)',
+    trendFixedSub: 'Série temporal 2020–2024',
+    thCountry: 'País',
+    thFixed: 'Tel. Fixa (M)',
+    thFixedP: 'Tel. Fixa /100 hab',
+    thMobile: 'Móvel (M)',
+    thMobileP: 'Móvel /100 hab',
+    thInternet: 'Internet Fixa (M)',
+    thInternetP: 'Internet Fixa /100 hab',
+    footerLine1: 'MERCOSUL — SGT-1 Comunicações · CTSPT',
+    footerLine2: 'Comissão Temática de Serviços Públicos de Telecomunicações',
+    footerLine3: 'Dados consolidados conforme relatórios anuais publicados no sítio do MERCOSUL · Definições:',
+    footerLine4: 'Dashboard desenvolvido para publicação aberta · Dados: 2020–2024',
+    kpiMobile: '📱 Móvel',
+    kpiInternet: '🌐 Internet Fixa',
+    kpiFixed: '☎️ Tel. Fixa',
+    per100: '/100hab',
+    totalLabel: 'Total de Acessos (M)',
+    countries: { arg: 'Argentina', bra: 'Brasil', pry: 'Paraguai', ury: 'Uruguai' }
+  },
+  es: {
+    htmlLang: 'es',
+    pageTitle: 'MERCOSUR · Indicadores de Telecomunicaciones SGT-1 CTSPT',
+    logoSub: 'Indicadores de Telecomunicaciones',
+    heroEyebrow: 'Subgrupo de Trabajo N.º 1 — Comunicaciones',
+    heroH1: 'Observatorio de Telecomunicaciones<br>del MERCOSUR',
+    heroP: 'Monitoreo de la evolución de los indicadores básicos de acceso a servicios de telecomunicaciones en los Estados Miembros, según definiciones internacionales de la UIT.',
+    secKPI: 'Panel por País',
+    secCompare: 'Penetración por 100 Habitantes — Visión Comparativa',
+    secTrend: 'Evolución Histórica 2020–2024',
+    secTable: 'Tabla Completa de Datos',
+    filterLabel: 'Países:',
+    chartMobileTitle: '📱 Comunicaciones Móviles',
+    chartMobileSub: 'Accesos por 100 hab. · comparativo entre países',
+    chartInternetTitle: '🌐 Internet Fija',
+    chartInternetSub: 'Accesos por 100 hab. · comparativo entre países',
+    chartFixedTitle: '☎️ Telefonía Fija',
+    chartFixedSub: 'Accesos por 100 hab. · comparativo entre países',
+    chartTotalTitle: '📊 Total de Accesos (Millones)',
+    chartTotalSub: 'Todos los servicios · comparativo entre países',
+    trendMobileTitle: 'Evolución — Comunicaciones Móviles (por 100 hab.)',
+    trendMobileSub: 'Serie temporal 2020–2024',
+    trendInternetTitle: 'Evolución — Internet Fija (por 100 hab.)',
+    trendInternetSub: 'Serie temporal 2020–2024',
+    trendFixedTitle: 'Evolución — Telefonía Fija (por 100 hab.)',
+    trendFixedSub: 'Serie temporal 2020–2024',
+    thCountry: 'País',
+    thFixed: 'Tel. Fija (M)',
+    thFixedP: 'Tel. Fija /100 hab',
+    thMobile: 'Móvil (M)',
+    thMobileP: 'Móvil /100 hab',
+    thInternet: 'Internet Fija (M)',
+    thInternetP: 'Internet Fija /100 hab',
+    footerLine1: 'MERCOSUR — SGT-1 Comunicaciones · CTSPT',
+    footerLine2: 'Comisión Temática de Servicios Públicos de Telecomunicaciones',
+    footerLine3: 'Datos consolidados conforme a informes anuales publicados en el sitio del MERCOSUR · Definiciones:',
+    footerLine4: 'Dashboard desarrollado para publicación abierta · Datos: 2020–2024',
+    kpiMobile: '📱 Móvil',
+    kpiInternet: '🌐 Internet Fija',
+    kpiFixed: '☎️ Tel. Fija',
+    per100: '/100hab',
+    totalLabel: 'Total de Accesos (M)',
+    countries: { arg: 'Argentina', bra: 'Brasil', pry: 'Paraguay', ury: 'Uruguay' }
+  }
+};
+
+let currentLang = 'es';
+
+function setLang(lang) {
+  currentLang = lang;
+  const t = T[lang];
+
+  // html lang
+  document.documentElement.lang = t.htmlLang;
+  document.title = t.pageTitle;
+
+  // header
+  document.getElementById('logo-sub-text').textContent = t.logoSub;
+
+  // lang buttons
+  document.getElementById('lang-pt').classList.toggle('active', lang === 'pt');
+  document.getElementById('lang-es').classList.toggle('active', lang === 'es');
+
+  // hero
+  document.querySelector('.hero-eyebrow').textContent = t.heroEyebrow;
+  document.querySelector('.hero h1').innerHTML = t.heroH1;
+  document.querySelector('.hero p').textContent = t.heroP;
+
+  // section labels (preserve badge spans)
+  document.getElementById('sec-kpi').childNodes[0].textContent = t.secKPI + ' ';
+  document.getElementById('sec-compare').textContent = t.secCompare;
+  document.getElementById('sec-trend').textContent = t.secTrend;
+  document.getElementById('sec-table').childNodes[0].textContent = t.secTable + ' ';
+
+  // filter label
+  document.getElementById('filter-label').textContent = t.filterLabel;
+
+  // country filter buttons
+  document.getElementById('btn-arg').innerHTML = `🇦🇷 ${t.countries.arg}`;
+  document.getElementById('btn-bra').innerHTML = `🇧🇷 ${t.countries.bra}`;
+  document.getElementById('btn-pry').innerHTML = `🇵🇾 ${t.countries.pry}`;
+  document.getElementById('btn-ury').innerHTML = `🇺🇾 ${t.countries.ury}`;
+
+  // chart titles/subtitles
+  document.getElementById('ct-mobile-title').textContent = t.chartMobileTitle;
+  document.getElementById('ct-mobile-sub').textContent = t.chartMobileSub;
+  document.getElementById('ct-internet-title').textContent = t.chartInternetTitle;
+  document.getElementById('ct-internet-sub').textContent = t.chartInternetSub;
+  document.getElementById('ct-fixed-title').textContent = t.chartFixedTitle;
+  document.getElementById('ct-fixed-sub').textContent = t.chartFixedSub;
+  document.getElementById('ct-total-title').textContent = t.chartTotalTitle;
+  document.getElementById('ct-total-sub').textContent = t.chartTotalSub;
+  document.getElementById('tr-mobile-title').textContent = t.trendMobileTitle;
+  document.getElementById('tr-mobile-sub').textContent = t.trendMobileSub;
+  document.getElementById('tr-internet-title').textContent = t.trendInternetTitle;
+  document.getElementById('tr-internet-sub').textContent = t.trendInternetSub;
+  document.getElementById('tr-fixed-title').textContent = t.trendFixedTitle;
+  document.getElementById('tr-fixed-sub').textContent = t.trendFixedSub;
+
+  // table headers
+  const ths = document.querySelectorAll('#tableHead th');
+  [t.thCountry, t.thFixed, t.thFixedP, t.thMobile, t.thMobileP, t.thInternet, t.thInternetP]
+    .forEach((txt, i) => { ths[i].textContent = txt; });
+
+  // footer
+  document.getElementById('foot1').textContent = t.footerLine1;
+  document.getElementById('foot2').textContent = t.footerLine2;
+  document.getElementById('foot3').textContent = t.footerLine3 + ' ';
+  document.getElementById('foot4').textContent = t.footerLine4;
+
+  // update COUNTRIES names for charts
+  COUNTRIES.forEach(c => { c.name = t.countries[c.id]; });
+
+  // re-render everything
+  renderKPIs();
+  updateCompareCharts();
+  updateTrendCharts();
+  renderTable();
+}
+
+// ─── DATA ───────────────────────────────────────────────────────────────────
+const DATA = {
+  2020: {
+    arg: { fixed: 7.36, fixedP: 16.15, mobile: 54.76, mobileP: 120.21, internet: 9.57, internetP: 21.01 },
+    bra: { fixed: 36.34, fixedP: 17.05, mobile: 205.83, mobileP: 96.55, internet: 30.65, internetP: 14.38 },
+    pry: { fixed: 0.25, fixedP: 3.44, mobile: 7.87, mobileP: 108.44, internet: 0.52, internetP: 7.80 },
+    ury: { fixed: 1.20, fixedP: 34.13, mobile: 4.55, mobileP: 128.90, internet: 1.06, internetP: 30.13 }
+  },
+  2021: {
+    arg: { fixed: 6.90, fixedP: 15.01, mobile: 59.07, mobileP: 128.44, internet: 10.49, internetP: 22.81 },
+    bra: { fixed: 41.50, fixedP: 19.37, mobile: 219.66, mobileP: 102.50, internet: 28.88, internetP: 13.48 },
+    pry: { fixed: 0.20, fixedP: 2.77, mobile: 7.97, mobileP: 108.46, internet: 0.72, internetP: 9.80 },
+    ury: { fixed: 1.23, fixedP: 35.08, mobile: 4.69, mobileP: 132.86, internet: 1.11, internetP: 31.31 }
+  },
+  2022: {
+    arg: { fixed: 7.04, fixedP: 15.31, mobile: 59.70, mobileP: 128.65, internet: 11.21, internetP: 24.15 },
+    bra: { fixed: 27.10, fixedP: 13.30, mobile: 252.00, mobileP: 104.90, internet: 45.40, internetP: 22.30 },
+    pry: { fixed: 0.17, fixedP: 2.76, mobile: 8.66, mobileP: 141.73, internet: 0.74, internetP: 12.08 },
+    ury: { fixed: 1.26, fixedP: 35.69, mobile: 4.74, mobileP: 134.28, internet: 1.14, internetP: 32.16 }
+  },
+  2023: {
+    arg: { fixed: 7.03, fixedP: 15.02, mobile: 62.71, mobileP: 133.92, internet: 11.55, internetP: 24.66 },
+    bra: { fixed: 25.40, fixedP: 12.50, mobile: 256.40, mobileP: 105.00, internet: 48.50, internetP: 23.90 },
+    pry: { fixed: 0.20, fixedP: 3.36, mobile: 8.66, mobileP: 141.82, internet: 0.87, internetP: 14.36 },
+    ury: { fixed: 1.21, fixedP: 34.99, mobile: 6.71, mobileP: 194.92, internet: 1.10, internetP: 31.87 }
+  },
+  2024: {
+    arg: { fixed: 6.42, fixedP: 13.59, mobile: 64.08, mobileP: 135.66, internet: 11.93, internetP: 25.25 },
+    bra: { fixed: 23.00, fixedP: 10.80, mobile: 263.40, mobileP: 101.60, internet: 52.50, internetP: 24.70 },
+    pry: { fixed: 0.10, fixedP: 1.60, mobile: 8.09, mobileP: 132.45, internet: 0.90, internetP: 14.76 },
+    ury: { fixed: 1.21, fixedP: 35.58, mobile: 7.23, mobileP: 213.49, internet: 1.12, internetP: 33.07 }
+  }
+};
+
+const COUNTRIES = [
+  { id: 'arg', name: 'Argentina', flag: '🇦🇷', color: '#74b9ff' },
+  { id: 'bra', name: 'Brasil', flag: '🇧🇷', color: '#55efc4' },
+  { id: 'pry', name: 'Paraguai', flag: '🇵🇾', color: '#fdcb6e' },
+  { id: 'ury', name: 'Uruguai', flag: '🇺🇾', color: '#a29bfe' }
+];
+
+const YEARS = [2020, 2021, 2022, 2023, 2024];
+
+let currentYear = 2024;
+let activeCountries = { arg: true, bra: true, pry: true, ury: true };
+let charts = {};
+
+// ─── CHART DEFAULTS ──────────────────────────────────────────────────────────
+Chart.defaults.color = '#7a8599';
+Chart.defaults.font.family = "'Segoe UI', system-ui, sans-serif";
+Chart.defaults.font.size = 11;
+
+const gridColor = 'rgba(30,45,69,0.8)';
+
+function baseOptions(legend = false) {
+  return {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        display: legend,
+        position: 'bottom',
+        labels: { color: '#7a8599', padding: 16, usePointStyle: true, pointStyleWidth: 8 }
+      },
+      tooltip: {
+        backgroundColor: '#1a2235',
+        borderColor: '#1e2d45',
+        borderWidth: 1,
+        titleColor: '#e8eaf0',
+        bodyColor: '#7a8599',
+        padding: 10,
+        cornerRadius: 8
+      }
+    },
+    scales: {
+      x: {
+        grid: { color: gridColor },
+        ticks: { color: '#7a8599' },
+        border: { color: '#1e2d45' }
+      },
+      y: {
+        grid: { color: gridColor },
+        ticks: { color: '#7a8599' },
+        border: { color: '#1e2d45' }
+      }
+    }
+  };
+}
+
+// ─── YEAR SELECTOR ───────────────────────────────────────────────────────────
+function setYear(y) {
+  currentYear = y;
+  document.querySelectorAll('.year-tab').forEach((btn, i) => {
+    btn.classList.toggle('active', YEARS[i] === y);
+  });
+  document.getElementById('yearBadge').textContent = y;
+  document.getElementById('tableBadge').textContent = y;
+  renderKPIs();
+  updateCompareCharts();
+  renderTable();
+}
+
+// ─── COUNTRY TOGGLE ──────────────────────────────────────────────────────────
+function toggleCountry(c) {
+  activeCountries[c] = !activeCountries[c];
+  const btn = document.getElementById(`btn-${c}`);
+  if (activeCountries[c]) {
+    btn.className = `filter-btn active-${c}`;
+  } else {
+    btn.className = 'filter-btn';
+  }
+  updateTrendCharts();
+}
+
+// ─── KPI CARDS ───────────────────────────────────────────────────────────────
+function renderKPIs() {
+  const d = DATA[currentYear];
+  const prev = DATA[currentYear - 1] || null;
+  const grid = document.getElementById('kpiGrid');
+  grid.innerHTML = COUNTRIES.map(c => {
+    const row = d[c.id];
+    const p = prev ? prev[c.id] : null;
+    function delta(cur, prv) {
+      if (!prv) return '';
+      const diff = ((cur - prv) / prv * 100).toFixed(1);
+      return `<span class="delta ${diff > 0 ? 'up' : diff < 0 ? 'down' : 'neutral'}">${diff > 0 ? '+' : ''}${diff}%</span>`;
+    }
+    return `
+    <div class="kpi-card ${c.id}">
+      <div class="kpi-flag">${c.flag}</div>
+      <div class="kpi-country">${c.name}</div>
+      <div class="kpi-row">
+        <span class="kpi-label">${T[currentLang].kpiMobile}</span>
+        <span class="kpi-value">${row.mobileP.toFixed(1)}<span> ${T[currentLang].per100}</span></span>
+      </div>
+      <div class="kpi-row" style="margin-bottom:0.5rem">
+        <span></span>
+        ${p ? delta(row.mobileP, p.mobileP) : ''}
+      </div>
+      <div class="kpi-row">
+        <span class="kpi-label">${T[currentLang].kpiInternet}</span>
+        <span class="kpi-value">${row.internetP.toFixed(1)}<span> ${T[currentLang].per100}</span></span>
+      </div>
+      <div class="kpi-row" style="margin-bottom:0.5rem">
+        <span></span>
+        ${p ? delta(row.internetP, p.internetP) : ''}
+      </div>
+      <div class="kpi-row">
+        <span class="kpi-label">${T[currentLang].kpiFixed}</span>
+        <span class="kpi-value">${row.fixedP.toFixed(1)}<span> ${T[currentLang].per100}</span></span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ─── COMPARE CHARTS ──────────────────────────────────────────────────────────
+function makeBar(canvasId, labels, datasets, unit = '') {
+  if (charts[canvasId]) charts[canvasId].destroy();
+  const ctx = document.getElementById(canvasId).getContext('2d');
+  const opts = baseOptions();
+  opts.plugins.tooltip.callbacks = {
+    label: ctx => ` ${ctx.parsed.y.toFixed(1)}${unit}`
+  };
+  charts[canvasId] = new Chart(ctx, {
+    type: 'bar',
+    data: { labels, datasets },
+    options: opts
+  });
+}
+
+function updateCompareCharts() {
+  const d = DATA[currentYear];
+  const labels = COUNTRIES.map(c => c.name);
+  const colors = COUNTRIES.map(c => c.color);
+
+  makeBar('chartMobile', labels, [{
+    label: T[currentLang].kpiMobile,
+    data: COUNTRIES.map(c => d[c.id].mobileP),
+    backgroundColor: colors.map(c => c + 'cc'),
+    borderColor: colors,
+    borderWidth: 2,
+    borderRadius: 6,
+    borderSkipped: false
+  }], '/100hab');
+
+  makeBar('chartInternet', labels, [{
+    label: T[currentLang].kpiInternet,
+    data: COUNTRIES.map(c => d[c.id].internetP),
+    backgroundColor: colors.map(c => c + 'cc'),
+    borderColor: colors,
+    borderWidth: 2,
+    borderRadius: 6,
+    borderSkipped: false
+  }], '/100hab');
+
+  makeBar('chartFixed', labels, [{
+    label: T[currentLang].kpiFixed,
+    data: COUNTRIES.map(c => d[c.id].fixedP),
+    backgroundColor: colors.map(c => c + 'cc'),
+    borderColor: colors,
+    borderWidth: 2,
+    borderRadius: 6,
+    borderSkipped: false
+  }], '/100hab');
+
+  const totalDs = COUNTRIES.map(c => ({
+    label: c.name,
+    data: [d[c.id].fixed + d[c.id].mobile + d[c.id].internet],
+    backgroundColor: c.color + 'cc',
+    borderColor: c.color,
+    borderWidth: 2,
+    borderRadius: 6,
+    borderSkipped: false
+  }));
+  if (charts['chartTotal']) charts['chartTotal'].destroy();
+  const ctx = document.getElementById('chartTotal').getContext('2d');
+  const opts = baseOptions(true);
+  opts.plugins.tooltip.callbacks = { label: c => ` ${c.parsed.y.toFixed(1)}M` };
+  charts['chartTotal'] = new Chart(ctx, {
+    type: 'bar',
+    data: { labels: [T[currentLang].totalLabel], datasets: totalDs },
+    options: opts
+  });
+}
+
+// ─── TREND CHARTS ─────────────────────────────────────────────────────────────
+function makeLine(canvasId, datasets) {
+  if (charts[canvasId]) charts[canvasId].destroy();
+  const ctx = document.getElementById(canvasId).getContext('2d');
+  const opts = baseOptions(true);
+  opts.plugins.tooltip.callbacks = { label: c => ` ${c.parsed.y.toFixed(1)}/100hab` };
+  opts.elements = { point: { radius: 4, hoverRadius: 6 }, line: { tension: 0.35 } };
+  charts[canvasId] = new Chart(ctx, {
+    type: 'line',
+    data: { labels: YEARS, datasets },
+    options: opts
+  });
+}
+
+function updateTrendCharts() {
+  const active = COUNTRIES.filter(c => activeCountries[c.id]);
+
+  makeLine('trendMobile', active.map(c => ({
+    label: `${c.flag} ${c.name}`,
+    data: YEARS.map(y => DATA[y][c.id].mobileP),
+    borderColor: c.color,
+    backgroundColor: c.color + '18',
+    fill: true,
+    borderWidth: 2.5,
+    pointBackgroundColor: c.color
+  })));
+
+  makeLine('trendInternet', active.map(c => ({
+    label: `${c.flag} ${c.name}`,
+    data: YEARS.map(y => DATA[y][c.id].internetP),
+    borderColor: c.color,
+    backgroundColor: c.color + '18',
+    fill: false,
+    borderWidth: 2.5,
+    pointBackgroundColor: c.color
+  })));
+
+  makeLine('trendFixed', active.map(c => ({
+    label: `${c.flag} ${c.name}`,
+    data: YEARS.map(y => DATA[y][c.id].fixedP),
+    borderColor: c.color,
+    backgroundColor: c.color + '18',
+    fill: false,
+    borderWidth: 2.5,
+    pointBackgroundColor: c.color
+  })));
+}
+
+// ─── DATA TABLE ──────────────────────────────────────────────────────────────
+function renderTable() {
+  const d = DATA[currentYear];
+  const prev = DATA[currentYear - 1];
+  const tbody = document.getElementById('dataTable');
+
+  tbody.innerHTML = COUNTRIES.map(c => {
+    const r = d[c.id];
+    const p = prev ? prev[c.id] : null;
+    function deltaCell(cur, prv) {
+      if (!prv) return '';
+      const diff = ((cur - prv) / prv * 100).toFixed(1);
+      return ` <span class="delta ${diff > 0 ? 'up' : diff < 0 ? 'down' : 'neutral'}">${diff > 0 ? '+' : ''}${diff}%</span>`;
+    }
+    return `<tr>
+      <td><div class="country-cell"><div class="dot" style="background:${c.color}"></div>${c.flag} ${c.name}</div></td>
+      <td>${r.fixed.toFixed(2)}${deltaCell(r.fixed, p?.fixed)}</td>
+      <td>${r.fixedP.toFixed(2)}${deltaCell(r.fixedP, p?.fixedP)}</td>
+      <td>${r.mobile.toFixed(2)}${deltaCell(r.mobile, p?.mobile)}</td>
+      <td>${r.mobileP.toFixed(2)}${deltaCell(r.mobileP, p?.mobileP)}</td>
+      <td>${r.internet.toFixed(2)}${deltaCell(r.internet, p?.internet)}</td>
+      <td>${r.internetP.toFixed(2)}${deltaCell(r.internetP, p?.internetP)}</td>
+    </tr>`;
+  }).join('');
+}
+
+// ─── INIT ────────────────────────────────────────────────────────────────────
+setLang('es');
+</script>
+</body>
+</html>
