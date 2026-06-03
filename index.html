@@ -243,16 +243,64 @@
   }
   .chart-card:hover { border-color: rgba(0,194,255,0.3); }
   .chart-card.wide { grid-column: 1 / -1; }
+  .chart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 0.25rem;
+    gap: 0.5rem;
+  }
   .chart-title {
     font-size: 0.85rem;
     font-weight: 700;
     color: var(--text);
-    margin-bottom: 0.25rem;
+    flex: 1;
   }
   .chart-subtitle {
     font-size: 0.72rem;
     color: var(--muted);
     margin-bottom: 1.25rem;
+  }
+  .btn-csv {
+    background: rgba(0,229,160,0.08);
+    border: 1px solid rgba(0,229,160,0.25);
+    color: #00e5a0;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    padding: 0.25rem 0.65rem;
+    border-radius: 6px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s;
+    flex-shrink: 0;
+  }
+  .btn-csv:hover {
+    background: rgba(0,229,160,0.18);
+    border-color: #00e5a0;
+  }
+  .btn-csv.downloaded {
+    background: rgba(0,229,160,0.25);
+    color: #fff;
+  }
+  .btn-csv-all {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(0,229,160,0.1);
+    border: 1px solid rgba(0,229,160,0.3);
+    color: #00e5a0;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    padding: 0.5rem 1.2rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-bottom: 1.5rem;
+  }
+  .btn-csv-all:hover {
+    background: rgba(0,229,160,0.2);
   }
   .chart-wrap {
     position: relative;
@@ -453,22 +501,34 @@
   <div class="section-label" id="sec-compare">Penetración por 100 Habitantes — Visión Comparativa</div>
   <div class="chart-grid">
     <div class="chart-card">
-      <div class="chart-title" id="ct-mobile-title">📱 Comunicaciones Móviles</div>
+      <div class="chart-header">
+        <div class="chart-title" id="ct-mobile-title">📱 Comunicaciones Móviles</div>
+        <button class="btn-csv" onclick="csvCompare('mobile')">⬇ CSV</button>
+      </div>
       <div class="chart-subtitle" id="ct-mobile-sub">Accesos por 100 hab. · comparativo entre países</div>
       <div class="chart-wrap"><canvas id="chartMobile"></canvas></div>
     </div>
     <div class="chart-card">
-      <div class="chart-title" id="ct-internet-title">🌐 Internet Fija</div>
+      <div class="chart-header">
+        <div class="chart-title" id="ct-internet-title">🌐 Internet Fija</div>
+        <button class="btn-csv" onclick="csvCompare('internet')">⬇ CSV</button>
+      </div>
       <div class="chart-subtitle" id="ct-internet-sub">Accesos por 100 hab. · comparativo entre países</div>
       <div class="chart-wrap"><canvas id="chartInternet"></canvas></div>
     </div>
     <div class="chart-card">
-      <div class="chart-title" id="ct-fixed-title">☎️ Telefonía Fija</div>
+      <div class="chart-header">
+        <div class="chart-title" id="ct-fixed-title">☎️ Telefonía Fija</div>
+        <button class="btn-csv" onclick="csvCompare('fixed')">⬇ CSV</button>
+      </div>
       <div class="chart-subtitle" id="ct-fixed-sub">Accesos por 100 hab. · comparativo entre países</div>
       <div class="chart-wrap"><canvas id="chartFixed"></canvas></div>
     </div>
     <div class="chart-card">
-      <div class="chart-title" id="ct-total-title">📊 Total de Accesos (Millones)</div>
+      <div class="chart-header">
+        <div class="chart-title" id="ct-total-title">📊 Total de Accesos (Millones)</div>
+        <button class="btn-csv" onclick="csvTotal()">⬇ CSV</button>
+      </div>
       <div class="chart-subtitle" id="ct-total-sub">Todos los servicios · comparativo entre países</div>
       <div class="chart-wrap"><canvas id="chartTotal"></canvas></div>
     </div>
@@ -483,19 +543,29 @@
     <button class="filter-btn active-pry" id="btn-pry" onclick="toggleCountry('pry')">🇵🇾 Paraguay</button>
     <button class="filter-btn active-ury" id="btn-ury" onclick="toggleCountry('ury')">🇺🇾 Uruguay</button>
   </div>
+  <button class="btn-csv-all" onclick="csvAllData()">⬇ Baixar todos os dados (CSV completo)</button>
   <div class="chart-grid">
     <div class="chart-card wide">
-      <div class="chart-title" id="tr-mobile-title">Evolución — Comunicaciones Móviles (por 100 hab.)</div>
+      <div class="chart-header">
+        <div class="chart-title" id="tr-mobile-title">Evolución — Comunicaciones Móviles (por 100 hab.)</div>
+        <button class="btn-csv" onclick="csvTrend('mobile')">⬇ CSV</button>
+      </div>
       <div class="chart-subtitle" id="tr-mobile-sub">Serie temporal 2020–2024</div>
       <div class="chart-wrap tall"><canvas id="trendMobile"></canvas></div>
     </div>
     <div class="chart-card">
-      <div class="chart-title" id="tr-internet-title">Evolución — Internet Fija (por 100 hab.)</div>
+      <div class="chart-header">
+        <div class="chart-title" id="tr-internet-title">Evolución — Internet Fija (por 100 hab.)</div>
+        <button class="btn-csv" onclick="csvTrend('internet')">⬇ CSV</button>
+      </div>
       <div class="chart-subtitle" id="tr-internet-sub">Serie temporal 2020–2024</div>
       <div class="chart-wrap"><canvas id="trendInternet"></canvas></div>
     </div>
     <div class="chart-card">
-      <div class="chart-title" id="tr-fixed-title">Evolución — Telefonía Fija (por 100 hab.)</div>
+      <div class="chart-header">
+        <div class="chart-title" id="tr-fixed-title">Evolución — Telefonía Fija (por 100 hab.)</div>
+        <button class="btn-csv" onclick="csvTrend('fixed')">⬇ CSV</button>
+      </div>
       <div class="chart-subtitle" id="tr-fixed-sub">Serie temporal 2020–2024</div>
       <div class="chart-wrap"><canvas id="trendFixed"></canvas></div>
     </div>
@@ -528,6 +598,16 @@
   <span id="foot2">Comisión Temática de Servicios Públicos de Telecomunicaciones</span><br>
   <span id="foot3">Datos consolidados conforme a informes anuales publicados en el sitio del MERCOSUR · Definiciones: </span><a href="https://www.itu.int" target="_blank">UIT / ITU</a><br>
   <span id="foot4" style="margin-top:0.5rem;display:block">Dashboard desarrollado para publicación abierta · Datos: 2020–2024</span>
+  <div style="margin-top:1rem;display:flex;justify-content:center;gap:0.75rem;flex-wrap:wrap;align-items:center">
+    <a href="https://betobrun.github.io/mercosur-telecom-dashboard/" target="_blank"
+       style="background:rgba(0,194,255,0.1);border:1px solid rgba(0,194,255,0.3);color:#00c2ff;font-size:0.75rem;font-weight:700;padding:0.4rem 1rem;border-radius:8px;text-decoration:none;letter-spacing:0.06em;">
+      🔗 betobrun.github.io/mercosur-telecom-dashboard
+    </a>
+    <button onclick="navigator.clipboard.writeText('https://betobrun.github.io/mercosur-telecom-dashboard/').then(()=>{this.textContent='✅ Copiado!';setTimeout(()=>this.textContent='📋 Copiar link',2000)})"
+       style="background:rgba(108,99,255,0.1);border:1px solid rgba(108,99,255,0.3);color:#a29bfe;font-size:0.75rem;font-weight:700;padding:0.4rem 1rem;border-radius:8px;cursor:pointer;letter-spacing:0.06em;">
+      📋 Copiar link
+    </button>
+  </div>
 </footer>
 
 <script>
@@ -994,6 +1074,80 @@ function renderTable() {
       <td>${r.internetP.toFixed(2)}${deltaCell(r.internetP, p?.internetP)}</td>
     </tr>`;
   }).join('');
+}
+
+// ─── CSV EXPORT ──────────────────────────────────────────────────────────────
+function downloadCSV(content, filename) {
+  const blob = new Blob(['﻿' + content], { type: 'text/csv;charset=utf-8;' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+function csvCompare(service) {
+  const t = T[currentLang];
+  const d = DATA[currentYear];
+  const serviceMap = {
+    mobile:   { col: 'mobileP',   colM: 'mobile',   labelP: t.thMobileP,   labelM: t.thMobile },
+    internet: { col: 'internetP', colM: 'internet',  labelP: t.thInternetP, labelM: t.thInternet },
+    fixed:    { col: 'fixedP',    colM: 'fixed',     labelP: t.thFixedP,    labelM: t.thFixed }
+  };
+  const s = serviceMap[service];
+  const rows = [
+    [t.thCountry, s.labelM, s.labelP],
+    ...COUNTRIES.map(c => [c.name, d[c.id][s.colM].toFixed(2), d[c.id][s.col].toFixed(2)])
+  ];
+  downloadCSV(rows.map(r => r.join(',')).join('\n'),
+    `mercosur_${service}_${currentYear}.csv`);
+}
+
+function csvTotal() {
+  const t = T[currentLang];
+  const d = DATA[currentYear];
+  const rows = [
+    [t.thCountry, t.thFixed, t.thMobile, t.thInternet, 'Total (M)'],
+    ...COUNTRIES.map(c => {
+      const r = d[c.id];
+      return [c.name, r.fixed.toFixed(2), r.mobile.toFixed(2), r.internet.toFixed(2),
+              (r.fixed + r.mobile + r.internet).toFixed(2)];
+    })
+  ];
+  downloadCSV(rows.map(r => r.join(',')).join('\n'),
+    `mercosur_total_acessos_${currentYear}.csv`);
+}
+
+function csvTrend(service) {
+  const t = T[currentLang];
+  const serviceLabel = { mobile: t.kpiMobile, internet: t.kpiInternet, fixed: t.kpiFixed };
+  const colMap = { mobile: 'mobileP', internet: 'internetP', fixed: 'fixedP' };
+  const col = colMap[service];
+  const header = ['Año', ...COUNTRIES.map(c => c.name)];
+  const rows = [
+    header,
+    ...YEARS.map(y => [y, ...COUNTRIES.map(c => DATA[y][c.id][col].toFixed(2))])
+  ];
+  downloadCSV(rows.map(r => r.join(',')).join('\n'),
+    `mercosur_tendencia_${service}_2020_2024.csv`);
+}
+
+function csvAllData() {
+  const t = T[currentLang];
+  const header = ['Año', t.thCountry, t.thFixed, t.thFixedP, t.thMobile, t.thMobileP, t.thInternet, t.thInternetP];
+  const rows = [header];
+  YEARS.forEach(y => {
+    COUNTRIES.forEach(c => {
+      const r = DATA[y][c.id];
+      rows.push([y, c.name,
+        r.fixed.toFixed(2), r.fixedP.toFixed(2),
+        r.mobile.toFixed(2), r.mobileP.toFixed(2),
+        r.internet.toFixed(2), r.internetP.toFixed(2)
+      ]);
+    });
+  });
+  downloadCSV(rows.map(r => r.join(',')).join('\n'),
+    `mercosur_SGT1_CTSPT_dados_completos_2020_2024.csv`);
 }
 
 // ─── INIT ────────────────────────────────────────────────────────────────────
