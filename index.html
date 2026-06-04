@@ -487,6 +487,7 @@
     <button class="year-tab" onclick="setYear(2022)">2022</button>
     <button class="year-tab" onclick="setYear(2023)">2023</button>
     <button class="year-tab active" onclick="setYear(2024)">2024</button>
+    <button class="year-tab" onclick="setYear(2025)">2025</button>
   </div>
 </div>
 
@@ -808,6 +809,12 @@ const DATA = {
     bra: { fixed: 23.00, fixedP: 10.80, mobile: 263.40, mobileP: 101.60, internet: 52.50, internetP: 24.70 },
     pry: { fixed: 0.10, fixedP: 1.60, mobile: 8.09, mobileP: 132.45, internet: 0.90, internetP: 14.76 },
     ury: { fixed: 1.21, fixedP: 35.58, mobile: 4.93, mobileP: 145.43, internet: 1.12, internetP: 33.07 }
+  },
+  2025: {
+    arg: { fixed: 6.49, fixedP: 13.97, mobile: 64.55, mobileP: 139.05, internet: 12.99, internetP: 27.99 },
+    bra: { fixed: 20.10, fixedP: 9.42, mobile: 270.20, mobileP: 126.60, internet: 53.90, internetP: 25.26 },
+    pry: { fixed: 0.10, fixedP: 1.60, mobile: 9.20, mobileP: 143.35, internet: 0.98, internetP: 15.22 },
+    ury: { fixed: 1.21, fixedP: 35.71, mobile: 4.85, mobileP: 142.96, internet: 1.14, internetP: 33.53 }
   }
 };
 
@@ -818,7 +825,7 @@ const COUNTRIES = [
   { id: 'ury', name: 'Uruguai', flag: '🇺🇾', color: '#a29bfe' }
 ];
 
-const YEARS = [2020, 2021, 2022, 2023, 2024];
+const YEARS = [2020, 2021, 2022, 2023, 2024, 2025];
 
 let currentYear = 2024;
 let activeCountries = { arg: true, bra: true, pry: true, ury: true };
