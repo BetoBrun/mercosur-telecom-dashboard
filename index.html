@@ -467,7 +467,7 @@
       </div>
     </div>
     <div style="display:flex;align-items:center;gap:0.75rem;">
-      <div class="header-pill">2020 – 2024</div>
+      <div class="header-pill">2020 – 2025</div>
       <div class="lang-switcher">
         <button class="lang-btn" id="lang-pt" onclick="setLang('pt')">🇧🇷 PT</button>
         <button class="lang-btn active" id="lang-es" onclick="setLang('es')">🇦🇷 ES</button>
@@ -486,8 +486,8 @@
     <button class="year-tab" onclick="setYear(2021)">2021</button>
     <button class="year-tab" onclick="setYear(2022)">2022</button>
     <button class="year-tab" onclick="setYear(2023)">2023</button>
-    <button class="year-tab active" onclick="setYear(2024)">2024</button>
-    <button class="year-tab" onclick="setYear(2025)">2025</button>
+    <button class="year-tab" onclick="setYear(2024)">2024</button>
+    <button class="year-tab active" onclick="setYear(2025)">2025</button>
   </div>
 </div>
 
@@ -536,7 +536,7 @@
   </div>
 
   <!-- TREND CHARTS -->
-  <div class="section-label" id="sec-trend">Evolución Histórica 2020–2024</div>
+  <div class="section-label" id="sec-trend">Evolución Histórica 2020–2025</div>
   <div class="filter-row">
     <span class="filter-label" id="filter-label">Países:</span>
     <button class="filter-btn active-arg" id="btn-arg" onclick="toggleCountry('arg')">🇦🇷 Argentina</button>
@@ -551,7 +551,7 @@
         <div class="chart-title" id="tr-mobile-title">Evolución — Comunicaciones Móviles (por 100 hab.)</div>
         <button class="btn-csv" onclick="csvTrend('mobile')">⬇ CSV</button>
       </div>
-      <div class="chart-subtitle" id="tr-mobile-sub">Serie temporal 2020–2024</div>
+      <div class="chart-subtitle" id="tr-mobile-sub">Serie temporal 2020–2025</div>
       <div class="chart-wrap tall"><canvas id="trendMobile"></canvas></div>
     </div>
     <div class="chart-card">
@@ -559,7 +559,7 @@
         <div class="chart-title" id="tr-internet-title">Evolución — Internet Fija (por 100 hab.)</div>
         <button class="btn-csv" onclick="csvTrend('internet')">⬇ CSV</button>
       </div>
-      <div class="chart-subtitle" id="tr-internet-sub">Serie temporal 2020–2024</div>
+      <div class="chart-subtitle" id="tr-internet-sub">Serie temporal 2020–2025</div>
       <div class="chart-wrap"><canvas id="trendInternet"></canvas></div>
     </div>
     <div class="chart-card">
@@ -567,7 +567,7 @@
         <div class="chart-title" id="tr-fixed-title">Evolución — Telefonía Fija (por 100 hab.)</div>
         <button class="btn-csv" onclick="csvTrend('fixed')">⬇ CSV</button>
       </div>
-      <div class="chart-subtitle" id="tr-fixed-sub">Serie temporal 2020–2024</div>
+      <div class="chart-subtitle" id="tr-fixed-sub">Serie temporal 2020–2025</div>
       <div class="chart-wrap"><canvas id="trendFixed"></canvas></div>
     </div>
   </div>
@@ -598,7 +598,7 @@
   <strong id="foot1">MERCOSUR — SGT-1 Comunicaciones · CTSPT</strong><br>
   <span id="foot2">Comisión Temática de Servicios Públicos de Telecomunicaciones</span><br>
   <span id="foot3">Datos consolidados conforme a informes anuales publicados en el sitio del MERCOSUR · Definiciones: </span><a href="https://www.itu.int" target="_blank">UIT / ITU</a><br>
-  <span id="foot4" style="margin-top:0.5rem;display:block">Dashboard desarrollado para publicación abierta · Datos: 2020–2024</span>
+  <span id="foot4" style="margin-top:0.5rem;display:block">Dashboard desarrollado para publicación abierta · Datos: 2020–2025</span>
   <div style="margin-top:1rem;display:flex;justify-content:center;gap:0.75rem;flex-wrap:wrap;align-items:center">
     <a href="https://betobrun.github.io/mercosur-telecom-dashboard/" target="_blank"
        style="background:rgba(0,194,255,0.1);border:1px solid rgba(0,194,255,0.3);color:#00c2ff;font-size:0.75rem;font-weight:700;padding:0.4rem 1rem;border-radius:8px;text-decoration:none;letter-spacing:0.06em;">
@@ -623,7 +623,7 @@ const T = {
     heroP: 'Monitoramento da evolução dos indicadores básicos de acesso a serviços de telecomunicações nos Estados-Membros, conforme definições internacionais da UIT.',
     secKPI: 'Painel por País',
     secCompare: 'Penetração por 100 Habitantes — Visão Comparativa',
-    secTrend: 'Evolução Histórica 2020–2024',
+    secTrend: 'Evolução Histórica 2020–2025',
     secTable: 'Tabela Completa de Dados',
     filterLabel: 'Países:',
     chartMobileTitle: '📱 Comunicações Móveis',
@@ -635,11 +635,11 @@ const T = {
     chartTotalTitle: '📊 Total de Acessos (Milhões)',
     chartTotalSub: 'Todos os serviços · comparativo entre países',
     trendMobileTitle: 'Evolução — Comunicações Móveis (por 100 hab.)',
-    trendMobileSub: 'Série temporal 2020–2024',
+    trendMobileSub: 'Série temporal 2020–2025',
     trendInternetTitle: 'Evolução — Internet Fixa (por 100 hab.)',
-    trendInternetSub: 'Série temporal 2020–2024',
+    trendInternetSub: 'Série temporal 2020–2025',
     trendFixedTitle: 'Evolução — Telefonia Fixa (por 100 hab.)',
-    trendFixedSub: 'Série temporal 2020–2024',
+    trendFixedSub: 'Série temporal 2020–2025',
     thCountry: 'País',
     thFixed: 'Tel. Fixa (M)',
     thFixedP: 'Tel. Fixa /100 hab',
@@ -650,7 +650,7 @@ const T = {
     footerLine1: 'MERCOSUL — SGT-1 Comunicações · CTSPT',
     footerLine2: 'Comissão Temática de Serviços Públicos de Telecomunicações',
     footerLine3: 'Dados consolidados conforme relatórios anuais publicados no sítio do MERCOSUL · Definições:',
-    footerLine4: 'Dashboard desenvolvido para publicação aberta · Dados: 2020–2024',
+    footerLine4: 'Dashboard desenvolvido para publicação aberta · Dados: 2020–2025',
     kpiMobile: '📱 Móvel',
     kpiInternet: '🌐 Internet Fixa',
     kpiFixed: '☎️ Tel. Fixa',
@@ -667,7 +667,7 @@ const T = {
     heroP: 'Monitoreo de la evolución de los indicadores básicos de acceso a servicios de telecomunicaciones en los Estados Miembros, según definiciones internacionales de la UIT.',
     secKPI: 'Panel por País',
     secCompare: 'Penetración por 100 Habitantes — Visión Comparativa',
-    secTrend: 'Evolución Histórica 2020–2024',
+    secTrend: 'Evolución Histórica 2020–2025',
     secTable: 'Tabla Completa de Datos',
     filterLabel: 'Países:',
     chartMobileTitle: '📱 Comunicaciones Móviles',
@@ -679,11 +679,11 @@ const T = {
     chartTotalTitle: '📊 Total de Accesos (Millones)',
     chartTotalSub: 'Todos los servicios · comparativo entre países',
     trendMobileTitle: 'Evolución — Comunicaciones Móviles (por 100 hab.)',
-    trendMobileSub: 'Serie temporal 2020–2024',
+    trendMobileSub: 'Serie temporal 2020–2025',
     trendInternetTitle: 'Evolución — Internet Fija (por 100 hab.)',
-    trendInternetSub: 'Serie temporal 2020–2024',
+    trendInternetSub: 'Serie temporal 2020–2025',
     trendFixedTitle: 'Evolución — Telefonía Fija (por 100 hab.)',
-    trendFixedSub: 'Serie temporal 2020–2024',
+    trendFixedSub: 'Serie temporal 2020–2025',
     thCountry: 'País',
     thFixed: 'Tel. Fija (M)',
     thFixedP: 'Tel. Fija /100 hab',
@@ -694,7 +694,7 @@ const T = {
     footerLine1: 'MERCOSUR — SGT-1 Comunicaciones · CTSPT',
     footerLine2: 'Comisión Temática de Servicios Públicos de Telecomunicaciones',
     footerLine3: 'Datos consolidados conforme a informes anuales publicados en el sitio del MERCOSUR · Definiciones:',
-    footerLine4: 'Dashboard desarrollado para publicación abierta · Datos: 2020–2024',
+    footerLine4: 'Dashboard desarrollado para publicación abierta · Datos: 2020–2025',
     kpiMobile: '📱 Móvil',
     kpiInternet: '🌐 Internet Fija',
     kpiFixed: '☎️ Tel. Fija',
@@ -827,7 +827,7 @@ const COUNTRIES = [
 
 const YEARS = [2020, 2021, 2022, 2023, 2024, 2025];
 
-let currentYear = 2024;
+let currentYear = 2025;
 let activeCountries = { arg: true, bra: true, pry: true, ury: true };
 let charts = {};
 
